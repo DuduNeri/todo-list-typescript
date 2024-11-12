@@ -1,192 +1,155 @@
 * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    font-family: "Ubuntu", sans-serif;
-    color: #080808;
-  }
-  
-  body {
-    background-image: url(https://images.alphacoders.com/135/thumb-1920-1354208.jpeg);
-    background-position: center;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
-  }
-  
-  .container {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 20px;
-    gap: 1rem;
-    text-align: center;
-    border-radius: 10px;
-    background-color: rgba(240, 240, 240, 0.2); 
-    display: flex;
-    flex-direction: column;
-    z-index: inherit;
-    align-items: center;
-    justify-content: center;
-    min-height: 75vh;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    width: 700px;
-  }
-  
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Ubuntu", sans-serif;
+  color: #ffffff;
+}
 
-  
-  @keyframes blinking {
-    0% {
-      color: #61dafb;
-    }
-    40% {
-      color: #21a1f1;
-    }
-    80% {
-      color: #005386;
-    }
-    100% {
-      color: #61dafb;
-    }
-  }
-  
-  .input-container {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    width: 100%;
-    position: relative;
-  }
-  
-  .input{
-    width: 60%;
-    height: 50px;
-    background: transparent;
-    outline: none;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 40px;
-    font-size: 16px;
-    color: #fff;
-    padding: 10px 20px;
-  }
-  
-  .btn-add {
-    margin-left: 10px;
-    padding: 8px 15px;
-    background-color: #21a1f1;
-    color: #282c34;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .btn-add:hover {
-    background-color: #7accff;
-    box-shadow: 0 0 15px rgba(33, 161, 241, 0.6);
-  }
- 
-  
-  .task-list {
-    list-style: none;
-    padding: 0;
-    width: 100%;
-    max-height: 400px;
-    overflow-y: auto;
-  }
-  
-  .task-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px;
-    margin-bottom: 15px;
-    background-color: #2c2f38; 
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-  }
-  
-  .btn-delete {
-    padding: 8px 15px;
-    background-color: #d07fff;
-    color: #282c34;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    gap: 1rem;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .btn-delete:hover {
-    background-color: #ff0000;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
 
-  }
+.container {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px; 
+
+}
+
+h1 {
+  border-bottom: 2px solid #1070ca;
+  padding: 3rem 1rem; 
+  font-size: 2.5em; 
+  text-align: center;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.input,
+#file-upload {
+  flex-grow: 1;
+  padding: 8px;
+  font-size: 1rem;
+  margin-right: 8px;
+  background-color: rgba(0, 0, 0, 0.8); 
+  border: 1px solid #000000;
+  border-radius: 4px;
+}
+
+.input::placeholder,
+.custom-file-upload {
+  color: #464646;
+}
+
+.custom-file-upload,
+.btn-add,
+.btn-edit,
+.btn-delete,
+.task-content button  {
+  padding: 8px 12px;
+  font-size: 1rem;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.custom-file-upload,
+.btn-add,
+.task-content button  {
+  background-color: #0c5ca3;
+}
+
+.btn-edit {
+  background-color: #0c5ca3; 
+
+}
+
+.btn-delete {
+  background-color: #0c5ca3;
+}
+
+.custom-file-upload:hover,
+.btn-add:hover {
+  background-color: #00a0bd;
+}
+
+.btn-edit:hover {
+  background-color: #00a0bd; 
+}
+
+.btn-delete:hover {
+  background-color: #00a0bd; 
+}
+
 .list {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  list-style-type: none;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.task-content {
+  word-break: break-word; 
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 1rem; 
+  margin-left: 10px; 
+}
+
+.list img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 4px;
+}
+
+.input-edit-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.input-edit {
+  padding: 8px;
+  font-size: 1rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 0;
+  flex-grow: 1;
+  flex-shrink: 1;
+  width: 100%;
+}
+
+@media (max-width: 500px) {
+  h1 {
+    font-size: 2em;
   }
-  
-  .btn-edit, .btn-delete {
-    padding: 8px 15px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-   
+
+  .input-container {
+    flex-direction: column; 
   }
-  
-  .btn-edit {
-    background-color: #61dafb;
+
+  .input,
+  #file-upload {
+    margin-right: 0;
+    margin-bottom: 8px; 
   }
-  
-  .btn-edit:hover {
-    background-color: #21a1f1;
-    box-shadow: 0 0 20px rgba(33, 161, 241, 0.6);
-  }
-  
-  .btn-delete {
-    background-color: #d07fff;
-  }
-  
-  .btn-delete:hover {
-    background-color: #ff0000;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
-  }
-  
-  
-  .list button + button {
-    margin-left: 10px; 
-  }
-  img{
-    max-width: 50px;
-    padding: 0.3rem;
-  }
-  .custom-file-upload {
-    display: inline-block;
-    padding: 10px 20px;
-    color: white;
-    background-color: #61dafb;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .custom-file-upload:hover {
-    background-color: #21a1f1;
-  }
-  
-  .file-name {
-    margin-left: 10px;
-    color: #fff;
-    font-style: italic;
-  }
-  
+}

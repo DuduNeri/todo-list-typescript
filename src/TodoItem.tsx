@@ -1,22 +1,6 @@
-import React from 'react';
-
-interface Todo {
-  id: number;
-  text: string;
-  completed: boolean;
-  file?: File;
-}
-
-interface ToDoItemProps {
-  todo: Todo;
-  toggleComplete: (id: number) => void;
-  deleteTodo: (id: number) => void;
-  startEditing: (id: number, currentText: string) => void;
-  isEditing: boolean;
-  editText: string;
-  setEditText: (text: string) => void;
-  editTodo: (id: number) => void;
-}
+import React, { useState, useRef } from 'react';
+import { FaFileAlt, FaFilePdf, FaFileWord, FaFileExcel, FaFileImage, FaFileAudio } from 'react-icons/fa';
+import { ToDoItemProps } from './ToDoItem.types';
 
 const ToDoItem: React.FC<ToDoItemProps> = ({
   todo,
@@ -28,32 +12,128 @@ const ToDoItem: React.FC<ToDoItemProps> = ({
   setEditText,
   editTodo,
 }) => {
-  const fileUrl = todo.file ? URL.createObjectURL(todo.file) : null;
+  const [fileUrl, setFileUrl] = useState(todo.file ? URL.createObjectURL(todo.file) : null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const newFile = e.target.files[0];
+      setFileUrl(URL.createObjectURL(newFile));
+      editTodo(todo.id, { ...todo, file: newFile });
+    }
+  };
+
+  const handleEditFileClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const getFileIcon = (fileName: string) => {
+    const fileExtension = fileName.split('.').pop()?.toLowerCase();
+    let icon = <FaFileAlt />; 
+
+    switch (fileExtension) {
+      case 'pdf':
+        icon = <FaFilePdf />;
+        break;
+      case 'doc':
+      case 'docx':
+        icon = <FaFileWord />;
+        break;
+      case 'xls':
+      case 'xlsx':
+        icon = <FaFileExcel />;
+        break;
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+        icon = <FaFileImage />;
+        break;
+      case 'mp3':
+      case 'wav':
+      case 'ogg':
+         icon = <FaFileAudio />;
+         break;
+    }
+    return icon;
+  };
 
   return (
-    <li className='list' style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-      {isEditing ? (
-        <input
-          className='input'
-          type="text"
-          value={editText}
-          onChange={(e) => setEditText(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && editTodo(todo.id)}
-        />
-      ) : (
-        <span onClick={() => toggleComplete(todo.id)}>{todo.text}</span>
-      )}
-      {fileUrl && (
-        <a href={fileUrl} target="_blank" rel="noopener noreferrer">
-          <img src={fileUrl} alt="Attachment preview" style={{ width: '50px', height: '50px', margin: '0 10px' }} />
-        </a>
-      )}
-      {isEditing ? (
-        <button className='btn-edit' onClick={() => editTodo(todo.id)}>Save</button>
-      ) : (
-        <button className='btn-edit' onClick={() => startEditing(todo.id, todo.text)}>Edit</button>
-      )}
-      <button className='btn-delete' onClick={() => deleteTodo(todo.id)}>Delete</button>
+    <li className="list">
+      <div
+        className="task-content"
+        style={{
+          textDecoration: todo.completed ? 'line-through' : 'none',
+          display: 'flex',
+          alignItems: 'center',
+          flex: 1,
+        }}
+      >
+        {isEditing ? (
+          <input
+            className="input-edit"
+            type="text"
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && editTodo(todo.id, { ...todo, text: editText })}
+          />
+        ) : (
+          <span onClick={() => toggleComplete(todo.id)}>{todo.text}</span>
+        )}
+
+        {todo.file ? (
+          <div style={{ display: 'flex', alignItems: 'center', marginLeft: '10px' }}>
+            <a href={fileUrl} target="_blank" rel="noopener noreferrer">
+              {getFileIcon(todo.file.name)}
+              <span>{todo.file.name}</span>
+            </a>
+
+            {isEditing && (
+              <label
+                htmlFor="edit-file-upload"
+                className="custom-file-upload"
+                onClick={handleEditFileClick} 
+                style={{ marginLeft: '5px' }}
+              >
+                Trocar Arquivo
+              </label>
+            )}
+          </div>
+        ) : (
+          isEditing && (
+            <label htmlFor="edit-file-upload" className="custom-file-upload">
+              Adicionar Arquivo
+            </label>
+          )
+        )}
+      </div>
+
+      <input
+        type="file"
+        id="edit-file-upload"
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+        ref={fileInputRef}
+        accept='.mp3,.wav,.ogg,.pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png'
+      />
+      
+
+      <div className="edit-buttons">
+        {isEditing ? (
+          <button className="btn-edit" onClick={() => editTodo(todo.id, { ...todo, text: editText })}>
+            Save
+          </button>
+        ) : (
+          <button className="btn-edit" onClick={() => startEditing(todo.id, todo.text)}>
+            Edit
+          </button>
+        )}
+        <button className="btn-delete" onClick={() => deleteTodo(todo.id)}>
+          Delete
+        </button>
+      </div>
     </li>
   );
 };
