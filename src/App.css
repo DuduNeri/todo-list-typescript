@@ -1,0 +1,192 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: "Ubuntu", sans-serif;
+    color: #080808;
+  }
+  
+  body {
+    background-image: url(https://images.alphacoders.com/135/thumb-1920-1354208.jpeg);
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    gap: 1rem;
+    text-align: center;
+    border-radius: 10px;
+    background-color: rgba(240, 240, 240, 0.2); 
+    display: flex;
+    flex-direction: column;
+    z-index: inherit;
+    align-items: center;
+    justify-content: center;
+    min-height: 75vh;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 700px;
+  }
+  
+
+  
+  @keyframes blinking {
+    0% {
+      color: #61dafb;
+    }
+    40% {
+      color: #21a1f1;
+    }
+    80% {
+      color: #005386;
+    }
+    100% {
+      color: #61dafb;
+    }
+  }
+  
+  .input-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 100%;
+    position: relative;
+  }
+  
+  .input{
+    width: 60%;
+    height: 50px;
+    background: transparent;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 40px;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px 20px;
+  }
+  
+  .btn-add {
+    margin-left: 10px;
+    padding: 8px 15px;
+    background-color: #21a1f1;
+    color: #282c34;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .btn-add:hover {
+    background-color: #7accff;
+    box-shadow: 0 0 15px rgba(33, 161, 241, 0.6);
+  }
+ 
+  
+  .task-list {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  .task-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #2c2f38; 
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .btn-delete {
+    padding: 8px 15px;
+    background-color: #d07fff;
+    color: #282c34;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    gap: 1rem;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .btn-delete:hover {
+    background-color: #ff0000;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+
+  }
+.list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .btn-edit, .btn-delete {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+   
+  }
+  
+  .btn-edit {
+    background-color: #61dafb;
+  }
+  
+  .btn-edit:hover {
+    background-color: #21a1f1;
+    box-shadow: 0 0 20px rgba(33, 161, 241, 0.6);
+  }
+  
+  .btn-delete {
+    background-color: #d07fff;
+  }
+  
+  .btn-delete:hover {
+    background-color: #ff0000;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+  }
+  
+  
+  .list button + button {
+    margin-left: 10px; 
+  }
+  img{
+    max-width: 50px;
+    padding: 0.3rem;
+  }
+  .custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    background-color: #61dafb;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .custom-file-upload:hover {
+    background-color: #21a1f1;
+  }
+  
+  .file-name {
+    margin-left: 10px;
+    color: #fff;
+    font-style: italic;
+  }
+  
