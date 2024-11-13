@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import ToDoItem from './TodoItem';
-import { FaFilePdf, FaFileWord, FaFileExcel, FaFileAlt } from 'react-icons/fa'; // Adicionando os ícones
+import { FaFilePdf, FaFileWord, FaFileExcel, FaFileAlt } from 'react-icons/fa'; 
 
 interface Todo {
   id: number;
@@ -15,37 +15,41 @@ const App: React.FC = () => {
   const [newTodo, setNewTodo] = useState<string>('');
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const [editText, setEditText] = useState<string>('');
-  const [file, setFile] = useState<File | null>(null);
-  const [newFiles, setNewFiles] = useState<File[]>([]); // Adicionando estado para múltiplos arquivos
-  
-  
-  
+  const [file, setFile] = useState<File | null>(null); 
+
+  useEffect(() => {
+    const storedTodos = localStorage.getItem('todos');
+    if (storedTodos) {
+      try {
+        setTodos(JSON.parse(storedTodos));
+      } catch (error) {
+        console.error("Failed to parse todos from localStorage", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = () => {
-    const newTodos = [...todos];
-
-    // Se tiver texto ou arquivo, adiciona a tarefa
-    if (newTodo.trim() !== '' || newFiles.length > 0) {
-      newTodos.push({
+    if (newTodo.trim() !== '' || file) {
+      const newTask = {
         id: Date.now(),
         text: newTodo,
         completed: false,
-        file: newFiles[newTodos.length] || null, // Adiciona o arquivo se existir
-      });
+        file: file || null,
+      };
 
-      setTodos(newTodos);
+      setTodos(prevTodos => [...prevTodos, newTask]);
       setNewTodo('');
-      setNewFiles([]); // Limpa o estado dos arquivos
+      setFile(null);
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setNewFiles(prevFiles => {
-        const updatedFiles = [...prevFiles];
-        updatedFiles[index] = e.target.files[0];
-        return updatedFiles;
-      });
+      setFile(e.target.files[0]);
     }
   };
 
@@ -66,7 +70,7 @@ const App: React.FC = () => {
 
   const editTodo = (id: number, newTodo: Todo) => {
     setTodos(todos.map(todo =>
-      todo.id === id ?  newTodo  : todo
+      todo.id === id ? newTodo : todo
     ));
     setIsEditing(null);
     setEditText('');
@@ -74,7 +78,6 @@ const App: React.FC = () => {
 
   const getFileIcon = (file: File) => {
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
-
     switch (fileExtension) {
       case 'pdf':
         return <FaFilePdf />;
@@ -85,7 +88,7 @@ const App: React.FC = () => {
       case 'xlsx':
         return <FaFileExcel />;
       default:
-        return <FaFileAlt />; // Ícone genérico para outros tipos de arquivo
+        return <FaFileAlt />;
     }
   };
 
@@ -106,15 +109,15 @@ const App: React.FC = () => {
         <input
           id="file-upload"
           type="file"
-          onChange={(e) => handleFileChange(e, todos.length)}
+          onChange={handleFileChange}
           style={{ display: 'none' }}
         />
-        <button  className="btn-add" onClick={addTodo}>
+        <button className="btn-add" onClick={addTodo}>
           Add
         </button>
       </div>
       <ul>
-        {todos.map((todo, index) => (
+        {todos.map((todo) => (
           <ToDoItem
             key={todo.id}
             todo={todo}
@@ -126,7 +129,6 @@ const App: React.FC = () => {
             setEditText={setEditText}
             editTodo={(id, newTodo) => editTodo(id, newTodo)}
           >
-            {/* Exibindo o ícone do arquivo, se houver */}
             {todo.file && (
               <div className="file-icon">
                 {getFileIcon(todo.file)}
