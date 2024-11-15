@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import ToDoItem from './TodoItem';
-import AudioRecorder from './AudioRecorder'; // Importando o gravador de áudio
+import AudioRecorder from './AudioRecorder'; 
 import { FaFilePdf, FaFileWord, FaFileExcel, FaFileAlt } from 'react-icons/fa'; 
+import { toast, ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 interface Todo {
   id: number;
@@ -20,10 +22,6 @@ const App: React.FC = () => {
   const [file, setFile] = useState<File | null>(null); 
   const [audio, setAudio] = useState<Blob | null>(null); 
 
-  useEffect((todos) =>{
-     setTodos
-  },[ToDoItem])
-
   const addTodo = () => {
     if (newTodo.trim() !== '' || file || audio) {
       const newTask = {
@@ -38,6 +36,7 @@ const App: React.FC = () => {
       setNewTodo('');
       setFile(null);
       setAudio(null); 
+      toast.success("Tarefa adicionada com sucesso!");
     }
   };
 
@@ -55,6 +54,7 @@ const App: React.FC = () => {
 
   const deleteTodo = (id: number) => {
     setTodos(todos.filter(todo => todo.id !== id));
+    toast.info("Tarefa removida!"); 
   };
 
   const startEditing = (id: number, currentText: string) => {
@@ -68,7 +68,22 @@ const App: React.FC = () => {
     ));
     setIsEditing(null);
     setEditText('');
+    toast.success("Tarefa editada com sucesso!"); 
   };
+
+  function addTask() {
+    const minhalista = localStorage.getItem("TodoItem");
+    let taskSalva = JSON.parse(minhalista || '[]');
+
+    const hasFilme = taskSalva.some((task: Todo) => task.id === minhalista?.id);
+    if (hasFilme) {
+      toast.warn("Esse filme já está na lista!"); 
+      return;
+    }
+    taskSalva.push({ id: Date.now(), text: 'new task' }); 
+    localStorage.setItem("TodoItem", JSON.stringify(taskSalva));
+    toast.success("Tarefa adicionada com sucesso!");
+  }
 
   const getFileIcon = (file: File) => {
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
@@ -144,9 +159,10 @@ const App: React.FC = () => {
         </ul>
       </div>
       <AudioRecorder onAudioRecorded={handleAudioRecorded} />
+      
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
     </>
   );  
-  
 };
 
 export default App;
