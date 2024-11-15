@@ -1,32 +1,38 @@
 import React, { useState, useRef } from 'react';
 import { FaMicrophone, FaStop } from 'react-icons/fa';
 
-const AudioRecorder: React.FC = () => {
+interface AudioRecorderProps {
+  onAudioRecorded: (audioBlob: Blob) => void;
+}
+
+const AudioRecorder: React.FC<AudioRecorderProps> = ({ onAudioRecorded }) => {
   const [isRecording, setIsRecording] = useState(false);
-  const [audioList, setAudioList] = useState<string[]>([]); 
+  const [audioList, setAudioList] = useState<string[]>([]);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
   const startRecording = () => {
     setIsRecording(true);
     audioChunksRef.current = [];
-    
-    navigator.mediaDevices.getUserMedia({ audio: true })
+
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
       .then((stream) => {
         const mediaRecorder = new MediaRecorder(stream);
         mediaRecorderRef.current = mediaRecorder;
-        
+
         mediaRecorder.ondataavailable = (event) => {
           audioChunksRef.current.push(event.data);
         };
-        
+
         mediaRecorder.onstop = () => {
           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
           const audioUrl = URL.createObjectURL(audioBlob);
 
           setAudioList((prevList) => [...prevList, audioUrl]);
+          onAudioRecorded(audioBlob);
         };
-        
+
         mediaRecorder.start();
       })
       .catch((error) => {
@@ -56,7 +62,7 @@ const AudioRecorder: React.FC = () => {
         {audioList.map((audio, index) => (
           <div key={index} className="audio-item">
             <p>Gravação {index + 1}</p>
-            <audio className='controls' controls>
+            <audio className="controls" controls>
               <source src={audio} type="audio/wav" />
             </audio>
             <button

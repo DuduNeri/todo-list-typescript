@@ -1,6 +1,26 @@
 import React, { useState, useRef } from 'react';
 import { FaFileAlt, FaFilePdf, FaFileWord, FaFileExcel, FaFileImage, FaFileAudio } from 'react-icons/fa';
-import { ToDoItemProps } from './ToDoItem.types';
+
+// Definindo o tipo Todo
+interface Todo {
+  id: number;
+  text: string;
+  completed: boolean;
+  file: File | undefined;
+  audio: Blob | undefined;
+}
+
+interface ToDoItemProps {
+  todo: Todo;
+  toggleComplete: (id: number) => void;
+  deleteTodo: (id: number) => void;
+  startEditing: (id: number, currentText: string) => void;
+  isEditing: boolean;
+  editText: string;
+  setEditText: (text: string) => void;
+  editTodo: (id: number, newTodo: Todo) => void; // Já está correto
+}
+
 
 const ToDoItem: React.FC<ToDoItemProps> = ({
   todo,
@@ -12,8 +32,7 @@ const ToDoItem: React.FC<ToDoItemProps> = ({
   setEditText,
   editTodo,
 }) => {
-  const [fileUrl, setFileUrl] = useState(todo.file ? URL.createObjectURL(todo.file) : null);
-
+  const [fileUrl, setFileUrl] = useState<string | undefined>(todo.file ? URL.createObjectURL(todo.file) : undefined);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +51,7 @@ const ToDoItem: React.FC<ToDoItemProps> = ({
 
   const getFileIcon = (fileName: string) => {
     const fileExtension = fileName.split('.').pop()?.toLowerCase();
-    let icon = <FaFileAlt />; 
+    let icon = <FaFileAlt />;
 
     switch (fileExtension) {
       case 'pdf':
@@ -54,8 +73,8 @@ const ToDoItem: React.FC<ToDoItemProps> = ({
       case 'mp3':
       case 'wav':
       case 'ogg':
-         icon = <FaFileAudio />;
-         break;
+        icon = <FaFileAudio />;
+        break;
     }
     return icon;
   };
@@ -94,7 +113,7 @@ const ToDoItem: React.FC<ToDoItemProps> = ({
               <label
                 htmlFor="edit-file-upload"
                 className="custom-file-upload"
-                onClick={handleEditFileClick} 
+                onClick={handleEditFileClick}
                 style={{ marginLeft: '5px' }}
               >
                 Trocar Arquivo
@@ -116,10 +135,7 @@ const ToDoItem: React.FC<ToDoItemProps> = ({
         onChange={handleFileChange}
         style={{ display: 'none' }}
         ref={fileInputRef}
-        accept='.mp3,.wav,.ogg,.pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png'
       />
-      
-
       <div className="edit-buttons">
         {isEditing ? (
           <button className="btn-edit" onClick={() => editTodo(todo.id, { ...todo, text: editText })}>

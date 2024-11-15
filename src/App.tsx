@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import ToDoItem from './TodoItem';
-import AudioRecorder from './AudioRecorder'; 
-import { FaFilePdf, FaFileWord, FaFileExcel, FaFileAlt } from 'react-icons/fa'; 
-import { toast, ToastContainer } from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css'; 
+import AudioRecorder from './AudioRecorder';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+// Interface Todo definida corretamente
 interface Todo {
   id: number;
   text: string;
   completed: boolean;
-  file?: File;
-  audio?: Blob; 
+  file: File | undefined;
+  audio: Blob | undefined;
 }
 
 const App: React.FC = () => {
@@ -19,23 +19,23 @@ const App: React.FC = () => {
   const [newTodo, setNewTodo] = useState<string>('');
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const [editText, setEditText] = useState<string>('');
-  const [file, setFile] = useState<File | null>(null); 
-  const [audio, setAudio] = useState<Blob | null>(null); 
+  const [file, setFile] = useState<File | null>(null);
+  const [audio, setAudio] = useState<Blob | null>(null);
 
   const addTodo = () => {
     if (newTodo.trim() !== '' || file || audio) {
-      const newTask = {
+      const newTask: Todo = {
         id: Date.now(),
         text: newTodo,
         completed: false,
-        file: file || null,
-        audio: audio || null, 
+        file: file || undefined,
+        audio: audio || undefined,
       };
 
       setTodos(prevTodos => [...prevTodos, newTask]);
       setNewTodo('');
       setFile(null);
-      setAudio(null); 
+      setAudio(null);
       toast.success("Tarefa adicionada com sucesso!");
     }
   };
@@ -54,7 +54,7 @@ const App: React.FC = () => {
 
   const deleteTodo = (id: number) => {
     setTodos(todos.filter(todo => todo.id !== id));
-    toast.info("Tarefa removida!"); 
+    toast.info("Tarefa removida!");
   };
 
   const startEditing = (id: number, currentText: string) => {
@@ -62,43 +62,14 @@ const App: React.FC = () => {
     setEditText(currentText);
   };
 
+  // Corrigido o parâmetro 'updatedTodo' para 'newTodo'
   const editTodo = (id: number, newTodo: Todo) => {
     setTodos(todos.map(todo =>
       todo.id === id ? newTodo : todo
     ));
     setIsEditing(null);
     setEditText('');
-    toast.success("Tarefa editada com sucesso!"); 
-  };
-
-  function addTask() {
-    const minhalista = localStorage.getItem("TodoItem");
-    let taskSalva = JSON.parse(minhalista || '[]');
-
-    const hasFilme = taskSalva.some((task: Todo) => task.id === minhalista?.id);
-    if (hasFilme) {
-      toast.warn("Esse filme já está na lista!"); 
-      return;
-    }
-    taskSalva.push({ id: Date.now(), text: 'new task' }); 
-    localStorage.setItem("TodoItem", JSON.stringify(taskSalva));
-    toast.success("Tarefa adicionada com sucesso!");
-  }
-
-  const getFileIcon = (file: File) => {
-    const fileExtension = file.name.split('.').pop()?.toLowerCase();
-    switch (fileExtension) {
-      case 'pdf':
-        return <FaFilePdf />;
-      case 'doc':
-      case 'docx':
-        return <FaFileWord />;
-      case 'xls':
-      case 'xlsx':
-        return <FaFileExcel />;
-      default:
-        return <FaFileAlt />;
-    }
+    toast.success("Tarefa editada com sucesso!");
   };
 
   const handleAudioRecorded = (audioBlob: Blob) => {
@@ -141,28 +112,15 @@ const App: React.FC = () => {
               isEditing={isEditing === todo.id}
               editText={editText}
               setEditText={setEditText}
-              editTodo={(id, newTodo) => editTodo(id, newTodo)}
-            >
-              {todo.file && (
-                <div className="file-icon">
-                  {getFileIcon(todo.file)}
-                  <span>{todo.file.name}</span>
-                </div>
-              )}
-              {todo.audio && (
-                <audio className="audio" controls>
-                  <source src={URL.createObjectURL(todo.audio)} type="audio/wav" />
-                </audio>
-              )}
-            </ToDoItem>
+              editTodo={editTodo} // Passando editTodo para ToDoItem
+            />
           ))}
         </ul>
       </div>
       <AudioRecorder onAudioRecorded={handleAudioRecorded} />
-      
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
     </>
-  );  
+  );
 };
 
 export default App;
