@@ -9,7 +9,7 @@ interface Todo {
   text: string;
   completed: boolean;
   file?: File;
-  audio?: Blob; // Novo campo para armazenar o áudio
+  audio?: Blob; 
 }
 
 const App: React.FC = () => {
@@ -18,22 +18,11 @@ const App: React.FC = () => {
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const [editText, setEditText] = useState<string>('');
   const [file, setFile] = useState<File | null>(null); 
-  const [audio, setAudio] = useState<Blob | null>(null); // Estado para o áudio
+  const [audio, setAudio] = useState<Blob | null>(null); 
 
-  useEffect(() => {
-    const storedTodos = localStorage.getItem('todos');
-    if (storedTodos) {
-      try {
-        setTodos(JSON.parse(storedTodos));
-      } catch (error) {
-        console.error("Failed to parse todos from localStorage", error);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+  useEffect((todos) =>{
+     setTodos
+  },[ToDoItem])
 
   const addTodo = () => {
     if (newTodo.trim() !== '' || file || audio) {
@@ -42,13 +31,13 @@ const App: React.FC = () => {
         text: newTodo,
         completed: false,
         file: file || null,
-        audio: audio || null, // Incluindo o áudio no todo
+        audio: audio || null, 
       };
 
       setTodos(prevTodos => [...prevTodos, newTask]);
       setNewTodo('');
       setFile(null);
-      setAudio(null); // Limpando o áudio após adicionar a tarefa
+      setAudio(null); 
     }
   };
 
@@ -102,59 +91,62 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      <h1>To-Do List</h1>
-      <div className="input-container">
-        <input
-          className="input"
-          type="text"
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
-          placeholder="Add a new task"
-        />
-        <label htmlFor="file-upload" className="custom-file-upload">
-          Escolher Arquivo
-        </label>
-        <input
-          id="file-upload"
-          type="file"
-          onChange={handleFileChange}
-          style={{ display: 'none' }}
-        />
-        <button className="btn-add" onClick={addTodo}>
-          Add
-        </button>
-        <AudioRecorder onAudioRecorded={handleAudioRecorded} />
+    <>
+      <div className="container">
+        <h1>To-Do List</h1>
+        <div className="input-container">
+          <input
+            className="input"
+            type="text"
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
+            placeholder="Add a new task"
+          />
+          <label htmlFor="file-upload" className="custom-file-upload">
+            Escolher Arquivo
+          </label>
+          <input
+            id="file-upload"
+            type="file"
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
+          />
+          <button className="btn-add" onClick={addTodo}>
+            Add
+          </button>
+        </div>
+        <ul>
+          {todos.map((todo) => (
+            <ToDoItem
+              key={todo.id}
+              todo={todo}
+              toggleComplete={toggleComplete}
+              deleteTodo={deleteTodo}
+              startEditing={startEditing}
+              isEditing={isEditing === todo.id}
+              editText={editText}
+              setEditText={setEditText}
+              editTodo={(id, newTodo) => editTodo(id, newTodo)}
+            >
+              {todo.file && (
+                <div className="file-icon">
+                  {getFileIcon(todo.file)}
+                  <span>{todo.file.name}</span>
+                </div>
+              )}
+              {todo.audio && (
+                <audio className="audio" controls>
+                  <source src={URL.createObjectURL(todo.audio)} type="audio/wav" />
+                </audio>
+              )}
+            </ToDoItem>
+          ))}
+        </ul>
       </div>
-      <ul>
-        {todos.map((todo) => (
-          <ToDoItem
-            key={todo.id}
-            todo={todo}
-            toggleComplete={toggleComplete}
-            deleteTodo={deleteTodo}
-            startEditing={startEditing}
-            isEditing={isEditing === todo.id}
-            editText={editText}
-            setEditText={setEditText}
-            editTodo={(id, newTodo) => editTodo(id, newTodo)}
-          >
-            {todo.file && (
-              <div className="file-icon">
-                {getFileIcon(todo.file)}
-                <span>{todo.file.name}</span>
-              </div>
-            )}
-            {todo.audio && (
-              <audio className='audio' controls>
-                <source src={URL.createObjectURL(todo.audio)} type="audio/wav" />
-              </audio>
-            )}
-          </ToDoItem>
-        ))}
-      </ul>
-    </div>
-  );
+      <AudioRecorder onAudioRecorded={handleAudioRecorded} />
+    </>
+  );  
+  
 };
 
 export default App;

@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
+import { FaMicrophone, FaStop } from 'react-icons/fa';
 
-const AudioRecorder: React.FC<{ onAudioRecorded: (audioBlob: Blob) => void }> = ({ onAudioRecorded }) => {
+const AudioRecorder: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [audioList, setAudioList] = useState<string[]>([]); 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
@@ -21,8 +22,9 @@ const AudioRecorder: React.FC<{ onAudioRecorded: (audioBlob: Blob) => void }> = 
         
         mediaRecorder.onstop = () => {
           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-          setAudioUrl(URL.createObjectURL(audioBlob));
-          onAudioRecorded(audioBlob);
+          const audioUrl = URL.createObjectURL(audioBlob);
+
+          setAudioList((prevList) => [...prevList, audioUrl]);
         };
         
         mediaRecorder.start();
@@ -37,18 +39,35 @@ const AudioRecorder: React.FC<{ onAudioRecorded: (audioBlob: Blob) => void }> = 
     mediaRecorderRef.current?.stop();
   };
 
+  const deleteAudio = (index: number) => {
+    setAudioList((prevList) => prevList.filter((_, i) => i !== index));
+  };
+
   return (
-    <div className='audio'>
-      <button onClick={isRecording ? stopRecording : startRecording}>
-        {isRecording ? 'Parar Gravação' : 'Gravar Áudio'}
+    <div className="audio-recorder">
+      <button
+        className={`audio-button ${isRecording ? 'recording' : ''}`}
+        onClick={isRecording ? stopRecording : startRecording}
+      >
+        {isRecording ? <FaStop /> : <FaMicrophone />}
       </button>
-      {audioUrl && (
-        <div>
-          <audio className='audio' controls>
-            <source src={audioUrl} type="audio/wav" />
-          </audio>
-        </div>
-      )}
+
+      <div className="audio-list">
+        {audioList.map((audio, index) => (
+          <div key={index} className="audio-item">
+            <p>Gravação {index + 1}</p>
+            <audio className='controls' controls>
+              <source src={audio} type="audio/wav" />
+            </audio>
+            <button
+              className="delete-audio-button"
+              onClick={() => deleteAudio(index)}
+            >
+              Deletar
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
