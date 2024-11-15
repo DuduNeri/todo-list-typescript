@@ -18,7 +18,7 @@ interface ToDoItemProps {
   isEditing: boolean;
   editText: string;
   setEditText: (text: string) => void;
-  editTodo: (id: number, newTodo: Todo) => void; // Já está correto
+  editTodo: (id: number, newTodo: Todo) => void;
 }
 
 

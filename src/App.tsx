@@ -5,7 +5,6 @@ import AudioRecorder from './AudioRecorder';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// Interface Todo definida corretamente
 interface Todo {
   id: number;
   text: string;
@@ -62,7 +61,6 @@ const App: React.FC = () => {
     setEditText(currentText);
   };
 
-  // Corrigido o parâmetro 'updatedTodo' para 'newTodo'
   const editTodo = (id: number, newTodo: Todo) => {
     setTodos(todos.map(todo =>
       todo.id === id ? newTodo : todo
@@ -112,7 +110,7 @@ const App: React.FC = () => {
               isEditing={isEditing === todo.id}
               editText={editText}
               setEditText={setEditText}
-              editTodo={editTodo} // Passando editTodo para ToDoItem
+              editTodo={editTodo} 
             />
           ))}
         </ul>
