@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { FaFileAlt, FaFilePdf, FaFileWord, FaFileExcel, FaFileImage, FaFileAudio } from 'react-icons/fa';
 
-// Definindo o tipo Todo
 interface Todo {
   id: number;
   text: string;
