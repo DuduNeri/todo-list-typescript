@@ -3,22 +3,22 @@
   padding: 0;
   margin: 0;
   font-family: "Ubuntu", sans-serif;
-  color: #22f8ff; /* Cor do texto mais suave */
+  color: #1f77b4;
 }
 
 .container {
   max-width: 1000px;
   margin: 20px auto;
-  padding: 70px;
+  padding: 100px;
   text-align: center;
   border-radius: 8px; 
-  border: #006d77 1px solid; /* Azul escuro profissional */
+  border: #006d77 1px solid; 
   max-height: 800px;
-  background-color: #1a2a2f; /* Fundo escuro e elegante */
+  background-color: #1a2a2f; 
 }
 
 h1 {
-  border-bottom: 2px solid #1f77b4; /* Azul brilhante */
+  border-bottom: 2px solid #1f77b4; 
   padding: 3rem 1rem; 
   font-size: 2.5em; 
   text-align: center;
@@ -38,14 +38,14 @@ h1 {
   padding: 8px;
   font-size: 1rem;
   margin-right: 8px;
-  background-color: #2f3e46; /* Cinza escuro com toque minimalista */
-  border: 1px solid #003d47; /* Azul muito escuro */
+  background-color: #2f3e46; 
+  border: 1px solid #003d47; 
   border-radius: 4px;
 }
 
 .input::placeholder,
 .custom-file-upload {
-  color: #aaa; /* Cor mais clara para placeholder */
+  color: #aaa;
 }
 
 .custom-file-upload,
@@ -55,7 +55,7 @@ h1 {
 .task-content button  {
   padding: 8px 12px;
   font-size: 1rem;
-  color: rgb(86, 255, 227);
+  color: white;
   border: none;
   cursor: pointer;
   border-radius: 4px;
@@ -65,28 +65,28 @@ h1 {
 .custom-file-upload,
 .btn-add,
 .task-content button  {
-  background-color: #006d77; /* Azul profissional */
+  background-color: #006d77; 
 }
 
 .btn-edit {
-  background-color: #004e58; /* Azul escuro */
+  background-color: #004e58; 
 }
 
 .btn-delete {
-  background-color: #004e58; /* Vermelho suave para delete */
+  background-color: #004e58; 
 }
 
 .custom-file-upload:hover,
 .btn-add:hover {
-  background-color: #00a0bd; /* Azul vibrante */
+  background-color: #00a0bd; 
 }
 
 .btn-edit:hover {
-  background-color: #009cbe; /* Azul claro */
+  background-color: #009cbe; 
 }
 
 .btn-delete:hover {
-  background-color: #009cbe; /* Vermelho vibrante */
+  background-color: #00a0bd; 
 }
 
 .list {
@@ -162,7 +162,7 @@ h1 {
 }
 
 .audio-button {
-  background-color: #1f77b4; /* Azul claro */
+  background-color: #0f1b2b; 
   color: white;
   border: none;
   border-radius: 50%;
@@ -177,11 +177,11 @@ h1 {
 }
 
 .audio-button:hover {
-  background-color: #00a0bd; /* Azul mais vibrante */
+  background-color: #00a0bd; 
 }
 
 .audio-button.recording {
-  background-color: #ff4d4f; /* Vermelho suave para gravação */
+  background-color: #ff4d4f; 
 }
 
 .audio-preview {
@@ -196,8 +196,8 @@ h1 {
 }
 
 .delete-audio-button {
-  background-color: #004e58; /* Azul escuro para excluir */
-  color: rgb(63, 255, 229);
+  background-color: #004e58; 
+  color: white;
   border: none;
   padding: 5px 10px;
   cursor: pointer;
@@ -206,7 +206,7 @@ h1 {
 }
 
 .delete-audio-button:hover {
-  background-color: #00beb4; /* Azul claro */
+  background-color: #009cbe; 
 }
 
 .controls{
