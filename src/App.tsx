@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import ToDoItem from './TodoItem';
+import AudioRecorder from './AudioRecorder'; // Importando o gravador de áudio
 import { FaFilePdf, FaFileWord, FaFileExcel, FaFileAlt } from 'react-icons/fa'; 
 
 interface Todo {
@@ -8,6 +9,7 @@ interface Todo {
   text: string;
   completed: boolean;
   file?: File;
+  audio?: Blob; // Novo campo para armazenar o áudio
 }
 
 const App: React.FC = () => {
@@ -16,6 +18,7 @@ const App: React.FC = () => {
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const [editText, setEditText] = useState<string>('');
   const [file, setFile] = useState<File | null>(null); 
+  const [audio, setAudio] = useState<Blob | null>(null); // Estado para o áudio
 
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
@@ -33,17 +36,19 @@ const App: React.FC = () => {
   }, [todos]);
 
   const addTodo = () => {
-    if (newTodo.trim() !== '' || file) {
+    if (newTodo.trim() !== '' || file || audio) {
       const newTask = {
         id: Date.now(),
         text: newTodo,
         completed: false,
         file: file || null,
+        audio: audio || null, // Incluindo o áudio no todo
       };
 
       setTodos(prevTodos => [...prevTodos, newTask]);
       setNewTodo('');
       setFile(null);
+      setAudio(null); // Limpando o áudio após adicionar a tarefa
     }
   };
 
@@ -92,6 +97,10 @@ const App: React.FC = () => {
     }
   };
 
+  const handleAudioRecorded = (audioBlob: Blob) => {
+    setAudio(audioBlob);
+  };
+
   return (
     <div className="container">
       <h1>To-Do List</h1>
@@ -115,6 +124,7 @@ const App: React.FC = () => {
         <button className="btn-add" onClick={addTodo}>
           Add
         </button>
+        <AudioRecorder onAudioRecorded={handleAudioRecorded} />
       </div>
       <ul>
         {todos.map((todo) => (
@@ -134,6 +144,11 @@ const App: React.FC = () => {
                 {getFileIcon(todo.file)}
                 <span>{todo.file.name}</span>
               </div>
+            )}
+            {todo.audio && (
+              <audio className='audio' controls>
+                <source src={URL.createObjectURL(todo.audio)} type="audio/wav" />
+              </audio>
             )}
           </ToDoItem>
         ))}
